@@ -6,17 +6,6 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 
-def generate_color(color, foreground=True, background=True):
-    text = ""
-
-    if foreground:
-        text += "\u001b[38;5;%dm" % color
-    if background:
-        text += "\u001b[48;5;%dm" % color
-
-    return text
-
-
 def print_text_to_graphics(text):
     click.echo(convert_text_to_graphics(text))
 
