@@ -60,10 +60,13 @@ def parse_time_parsed_into_groups(time_parsed_into_groups):
     return total_time_in_seconds
 
 
-def parse_time_in_seconds(time_in_seconds):
+def parse_time_in_seconds(time_in_seconds, with_separator=True):
     minutes, seconds = divmod(time_in_seconds, 60)
     hours, minutes = divmod(minutes, 60)
-    time_string = "%02d:%02d:%02d" % (hours, minutes, seconds)
+    if with_separator:
+        time_string = "%02d:%02d:%02d" % (hours, minutes, seconds)
+    else:
+        time_string = "%02d %02d %02d" % (hours, minutes, seconds)
     return time_string
 
 
@@ -76,12 +79,15 @@ def countdown_thread_method(countdown_total_time):
     is_time_passed = False
 
     while not is_time_passed:
-        time_string = parse_time_in_seconds(countdown_time_in_seconds)
+        if countdown_time_in_seconds % 2 == 0:
+            time_string = parse_time_in_seconds(countdown_time_in_seconds, with_separator=True)
+        else:
+            time_string = parse_time_in_seconds(countdown_time_in_seconds, with_separator=False)
         click.clear()
         print_text_to_graphics(time_string)
         countdown_time_in_seconds -= 1
         time.sleep(1)
-        if countdown_time_in_seconds <= 0:
+        if countdown_time_in_seconds < 0:
             is_time_passed = True
 
 
