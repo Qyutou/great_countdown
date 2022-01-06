@@ -2,6 +2,7 @@
 Simple command-line countdown written on python
 
 ## Installation
+Simple manual installation
 ```bash
 $ git clone https://github.com/Qyutou/great_countdown.git
 $ cd great_countdown
