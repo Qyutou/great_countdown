@@ -2,7 +2,37 @@ import click
 import time
 import threading
 import re
-# from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
+
+
+def generate_color(color, foreground=True, background=True):
+    text = ""
+
+    if foreground:
+        text += "\u001b[38;5;%dm" % color
+    if background:
+        text += "\u001b[48;5;%dm" % color
+
+    return text
+
+
+def print_text_to_graphics(text):
+    click.echo(convert_text_to_graphics(text))
+
+
+def convert_text_to_graphics(text):
+    font = ImageFont.load_default()
+    size = font.getsize(text)
+    image = Image.new("1", size, "black")
+    draw = ImageDraw.Draw(image)
+    draw.text((0, 0), text, "white", font=font)
+    pixels = np.array(image, dtype=np.uint8)
+    characters = np.array([' ', "0"])[pixels]
+    strings = characters.view('U' + str(characters.shape[1])).flatten()
+    result = "\n".join(strings)
+    result = result.replace("0", "\033[47m\033[37m0\033[0m")
+    return result
 
 
 def parse_input_time(countdown_time):
@@ -48,7 +78,7 @@ def countdown_thread_method(countdown_total_time):
     while not is_time_passed:
         time_string = parse_time_in_seconds(countdown_time_in_seconds)
         click.clear()
-        click.echo(time_string)
+        print_text_to_graphics(time_string)
         countdown_time_in_seconds -= 1
         time.sleep(1)
         if countdown_time_in_seconds <= 0:
