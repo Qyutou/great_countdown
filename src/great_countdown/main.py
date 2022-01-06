@@ -2,6 +2,7 @@ import click
 import time
 import threading
 import re
+# from PIL import Image, ImageDraw, ImageFont
 
 
 def parse_input_time(countdown_time):
@@ -63,4 +64,4 @@ def great_countdown(countdown_time):
 
 
 if __name__ == "__main__":
-    main()
+    great_countdown()
